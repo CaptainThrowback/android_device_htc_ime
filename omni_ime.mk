@@ -26,13 +26,14 @@ $(call inherit-product, vendor/omni/config/common.mk)
 $(call inherit-product, device/htc/ime/device.mk)
 
 ## Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := imedugl
-PRODUCT_NAME := omni_imedugl
+PRODUCT_DEVICE := ime
+PRODUCT_NAME := omni_ime
 PRODUCT_BRAND := htc
 PRODUCT_MODEL := HTC U12+
 PRODUCT_MANUFACTURER := HTC
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRODUCT_NAME=HTC U12+ \
-    BUILD_PRODUCT=HTC U12+ \
-    TARGET_DEVICE=HTC U12+
+    PRODUCT_NAME=ime
+	BUILD_PRODUCT=htc_ime \
+    TARGET_DEVICE=htc_ime
+	

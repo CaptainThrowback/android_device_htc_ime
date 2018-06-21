@@ -36,36 +36,16 @@ on fs
     chown system system /dev/ion
     install_keyring
 
-# Separate copy needed to use /sbin/linker64 instead of /system/bin/linker64
-service sbinqseecomd /sbin/qseecomd
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service prepdecrypt /sbin/prepdecrypt.sh
+service patchlevel /sbin/patchlevel.sh
     oneshot
     disabled
     user root
     group root
     seclabel u:r:recovery:s0
 
-service hwservicemanager /sbin/hwservicemanager
-    user root
-    group root
-    disabled
-    onrestart setprop hwservicemanager.ready false
-    seclabel u:r:recovery:s0
-
 service boot-1-0 /sbin/android.hardware.boot@1.0-service
     user root
     group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service servicemanager /sbin/servicemanager
-    user root
-    group root readproc
     disabled
     seclabel u:r:recovery:s0
 
@@ -83,39 +63,30 @@ service keystore /sbin/keystore /tmp/misc/keystore
     disabled
     seclabel u:r:recovery:s0
 
-service gatekeeper-1-0 /sbin/android.hardware.gatekeeper@1.0-service-qti
-    user root
-    group root
+service chargeled /sbin/chargeled
     disabled
-    seclabel u:r:recovery:s0
+    seclabel u:r:healthd:s0
 
-service keymaster-3-0 /sbin/android.hardware.keymaster@3.0-service-qti
-    user root
-    group root
+service detect_key /sbin/detect_key
     disabled
-    seclabel u:r:recovery:s0
+    seclabel u:r:healthd:s0
+    oneshot
+
+service offmode_charging /sbin/offmode_charging
+    disabled
+    seclabel u:r:healthd:s0
 
 on boot
+    start chargeled
+	
     setprop sys.usb.config adb
     write /proc/touchpanel/gesture_enable 1
     write /sys/devices/platform/soc/c440000.qcom,spmi/spmi-0/spmi0-02/c440000.qcom,spmi:qcom,pmi8998@2:qcom,qpnp-smb2/power_supply/usb/otg_switch 1
 
 on init
-    start hwservicemanager
+    # Load Tuxera exFAT module
+    insmod /system_root/lib/modules/texfat.ko
+    mkdir /vendor
+	
     start boot-1-0
-    start prepdecrypt
-    #setprop crypto.ready 1
-
-on property:crypto.ready=0
-    stop sbinqseecomd
-    stop keymaster-3-0
-    stop gatekeeper-1-0
-    stop servicemanager
-
-on property:crypto.ready=1
-    start sbinqseecomd
-
-on property:sys.listeners.registered=true
-    start keymaster-3-0
-    start gatekeeper-1-0
-    start servicemanager
+    start patchlevel
