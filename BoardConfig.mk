@@ -98,15 +98,18 @@ TW_HAS_DOWNLOAD_MODE := true
 TW_THEME := portrait_hdpi
 TW_NO_EXFAT_FUSE := true
 TARGET_RECOVERY_DEVICE_MODULES := chargeled
-TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
-TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so
+TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0 hwservicemanager keystore vdc libdiskconfig liblogwrap libf2fs_sparseblock vold ld-android
+TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so ${OUT}/system/bin/hwservicemanager ${OUT}/system/bin/keystore ${OUT}/system/bin/vdc ${OUT}/system/lib64/libdiskconfig.so ${OUT}/system/lib64/liblogwrap.so ${OUT}/system/lib64/libf2fs_sparseblock.so ${OUT}/system/bin/vold ${OUT}/system/lib64/ld-android.so
 TARGET_RECOVERY_DEVICE_MODULE += tzdata
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/usr/share/zoneinfo/tzdata
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += ${OUT}/system/usr/share/zoneinfo/tzdata
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TW_NO_SCREEN_BLANK := true
 
 # Encryption
 PLATFORM_SECURITY_PATCH := 2025-12-31
+TARGET_HW_DISK_ENCRYPTION := true
+TARGET_CRYPTFS_HW_PATH := device/qcom/common/cryptfs_hw
+TARGET_OUT_CRYPTFS_HW_PATH := $(TARGET_OUT_SHARED_LIBRARIES)
 TW_INCLUDE_CRYPTO := true
 TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
 
@@ -114,8 +117,8 @@ TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
 #TWRP_EVENT_LOGGING := true
 TARGET_USES_LOGD := true
 TWRP_INCLUDE_LOGCAT := true
-TARGET_RECOVERY_DEVICE_MODULES += strace debuggerd
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/xbin/strace $(OUT)/system/bin/debuggerd
+TARGET_RECOVERY_DEVICE_MODULES += debuggerd # strace
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd # $(OUT)/system/xbin/strace
 #TARGET_RECOVERY_DEVICE_MODULES += twrpdec
 #TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
 TW_CRYPTO_SYSTEM_VOLD_DEBUG := true

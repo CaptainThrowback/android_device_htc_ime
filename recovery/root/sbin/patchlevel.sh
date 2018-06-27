@@ -6,6 +6,7 @@ finish()
 	umount /s
 	rmdir /v
 	rmdir /s
+	setprop crypto.ready 1
 	exit 0
 }
 
