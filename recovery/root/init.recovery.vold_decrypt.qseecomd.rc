@@ -9,11 +9,9 @@ on fs
 # Oreo has qseecomd in /vendor/bin so add the additional
 # service. Only an existing binary will be started, never both.
 
-service sys_qseecomd /system/system/bin/qseecomd
+service sys_qseecomd /sbin/qseecomd
     user root
     group root
-    setenv PATH /system/system/bin
-    setenv LD_LIBRARY_PATH /system/system/lib64:/system/system/lib
     disabled
     oneshot
 
