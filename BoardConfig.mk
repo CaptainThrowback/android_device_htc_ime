@@ -106,12 +106,17 @@ TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TW_NO_SCREEN_BLANK := true
 
 # Encryption
-PLATFORM_SECURITY_PATCH := 2025-12-31
+PLATFORM_VERSION := 8.0.0
+PLATFORM_SECURITY_PATCH := 2018-03-01
 TARGET_HW_DISK_ENCRYPTION := true
 TARGET_CRYPTFS_HW_PATH := device/qcom/common/cryptfs_hw
 TARGET_OUT_CRYPTFS_HW_PATH := $(TARGET_OUT_SHARED_LIBRARIES)
 TW_INCLUDE_CRYPTO := true
 TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
+
+# Additional modules and relink files for resetprop
+TARGET_RECOVERY_DEVICE_MODULES += libsqlite libicuuc libicui18n
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libsqlite.so $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so
 
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true

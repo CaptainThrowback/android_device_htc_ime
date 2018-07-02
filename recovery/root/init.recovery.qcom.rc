@@ -25,41 +25,20 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import /init.recovery.qcom_decrypt.rc
+
+on init
+    # Load Tuxera exFAT module
+    insmod /vendor/lib/modules/texfat.ko
+	
+	start boot-1-0
+
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     symlink /dev/block/bootdevice/by-name/oem_stanvbk /dev/block/bootdevice/by-name/oem_stanvbk_a
     symlink /dev/block/bootdevice/by-name/oem_stanvbk /dev/block/bootdevice/by-name/oem_stanvbk_b
-    chmod 0660 /dev/qseecom
-    chown system drmrpc /dev/qseecom
-    chmod 0664 /dev/ion
-    chown system system /dev/ion
-    install_keyring
-
-service patchlevel /sbin/patchlevel.sh
-    oneshot
-    disabled
-    user root
-    group root
-    seclabel u:r:recovery:s0
 	
-service boot-1-0 /sbin/android.hardware.boot@1.0-service
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-# keystore is started and stopped on demand by TWRP
-service keystore /sbin/keystore /tmp/misc/keystore
-    user root
-    group root drmrpc readproc
-    disabled
-    seclabel u:r:recovery:s0
-
-service chargeled /sbin/chargeled
-    disabled
-    seclabel u:r:healthd:s0
-
 on boot
     start chargeled
 	
@@ -67,10 +46,12 @@ on boot
     write /proc/touchpanel/gesture_enable 1
     write /sys/devices/platform/soc/c440000.qcom,spmi/spmi-0/spmi0-02/c440000.qcom,spmi:qcom,pmi8998@2:qcom,qpnp-smb2/power_supply/usb/otg_switch 1
 
-on init
-    # Load Tuxera exFAT module
-    insmod /vendor/lib/modules/texfat.ko
-	
-	start boot-1-0
-    start patchlevel
-	
+service boot-1-0 /sbin/android.hardware.boot@1.0-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service chargeled /sbin/chargeled
+    disabled
+    seclabel u:r:healthd:s0
