@@ -115,8 +115,8 @@ TW_INCLUDE_CRYPTO := true
 TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
 
 # Additional modules and relink files for resetprop
-TARGET_RECOVERY_DEVICE_MODULES += libsqlite libicuuc libicui18n
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libsqlite.so $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so
+TARGET_RECOVERY_DEVICE_MODULES += libicuuc libicui18n libsqlite # resetprop
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so $(OUT)/system/lib64/libsqlite.so
 
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
@@ -129,5 +129,5 @@ TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd # $(OUT)/syst
 TW_CRYPTO_SYSTEM_VOLD_DEBUG := true
 
 # Vendor Init
-#TARGET_INIT_VENDOR_LIB := libinit_$(TARGET_DEVICE)
-#TARGET_UNIFIED_DEVICE := true
+TARGET_INIT_VENDOR_LIB := libinit_$(TARGET_DEVICE)
+TARGET_UNIFIED_DEVICE := true

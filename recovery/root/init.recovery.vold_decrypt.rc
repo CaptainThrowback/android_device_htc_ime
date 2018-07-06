@@ -8,5 +8,7 @@ service sys_vold /sbin/vold \
         --fsck_context=u:r:fsck:s0 --fsck_untrusted_context=u:r:fsck_untrusted:s0
     socket vold stream 0660 root mount
     socket cryptd stream 0660 root mount
+    setenv PATH /system/system/bin:/vendor/bin:/sbin
+    setenv LD_LIBRARY_PATH /system/system/lib64:/vendor/lib64:/system/system/lib:/vendor/lib:/sbin
     disabled
     oneshot
