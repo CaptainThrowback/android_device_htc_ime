@@ -22,18 +22,14 @@ $(call inherit-product, build/target/product/embedded.mk)
 # Inherit from our custom product configuration
 $(call inherit-product, vendor/omni/config/common.mk)
 
-# Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/htc/ime/device.mk)
-
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := ime
 PRODUCT_NAME := omni_ime
 PRODUCT_BRAND := htc
 PRODUCT_MODEL := HTC U12+
-PRODUCT_MANUFACTURER := HTC
+PRODUCT_MANUFACTURER := HTC	
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_NAME=ime \
 	BUILD_PRODUCT=htc_ime \
     TARGET_DEVICE=htc_ime
-	

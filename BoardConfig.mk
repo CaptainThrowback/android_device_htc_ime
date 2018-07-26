@@ -80,6 +80,7 @@ TARGET_COPY_OUT_VENDOR := vendor
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
+USE_LD_CONFIG_FILE := true
 
 # TWRP specific build flags
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
@@ -98,16 +99,14 @@ TW_HAS_DOWNLOAD_MODE := true
 TW_THEME := portrait_hdpi
 TW_NO_EXFAT_FUSE := true
 TARGET_RECOVERY_DEVICE_MODULES := chargeled
-TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0 hwservicemanager keystore vdc libdiskconfig liblogwrap libf2fs_sparseblock vold ld-android
-TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so ${OUT}/system/bin/hwservicemanager ${OUT}/system/bin/keystore ${OUT}/system/bin/vdc ${OUT}/system/lib64/libdiskconfig.so ${OUT}/system/lib64/liblogwrap.so ${OUT}/system/lib64/libf2fs_sparseblock.so ${OUT}/system/bin/vold ${OUT}/system/lib64/ld-android.so
-TARGET_RECOVERY_DEVICE_MODULE += tzdata
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += ${OUT}/system/usr/share/zoneinfo/tzdata
+TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
+TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TW_NO_SCREEN_BLANK := true
 
 # Encryption
 PLATFORM_VERSION := 8.0.0
-PLATFORM_SECURITY_PATCH := 2018-03-01
+PLATFORM_SECURITY_PATCH := 2018-06-01
 TARGET_HW_DISK_ENCRYPTION := true
 TARGET_CRYPTFS_HW_PATH := device/qcom/common/cryptfs_hw
 TARGET_OUT_CRYPTFS_HW_PATH := $(TARGET_OUT_SHARED_LIBRARIES)
@@ -115,19 +114,15 @@ TW_INCLUDE_CRYPTO := true
 TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
 
 # Additional modules and relink files for resetprop
-TARGET_RECOVERY_DEVICE_MODULES += libicuuc libicui18n libsqlite # resetprop
+TARGET_RECOVERY_DEVICE_MODULES += libicuuc libicui18n libsqlite
 TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so $(OUT)/system/lib64/libsqlite.so
 
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
-TARGET_USES_LOGD := true
-TWRP_INCLUDE_LOGCAT := true
-TARGET_RECOVERY_DEVICE_MODULES += debuggerd # strace
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd # $(OUT)/system/xbin/strace
+#TARGET_USES_LOGD := true
+#TWRP_INCLUDE_LOGCAT := true
+#TARGET_RECOVERY_DEVICE_MODULES += debuggerd # strace
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd # $(OUT)/system/xbin/strace
 #TARGET_RECOVERY_DEVICE_MODULES += twrpdec
 #TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
-TW_CRYPTO_SYSTEM_VOLD_DEBUG := true
-
-# Vendor Init
-TARGET_INIT_VENDOR_LIB := libinit_$(TARGET_DEVICE)
-TARGET_UNIFIED_DEVICE := true
+#TW_CRYPTO_SYSTEM_VOLD_DEBUG := true

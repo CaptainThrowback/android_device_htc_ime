@@ -11,6 +11,17 @@ on fs
 on property:ro.crypto.state=encrypted
     start sbinqseecomd
 
+#############################################################
+#															#
+#   Note: On AB devices using vold decrypt, system			#
+#	needs to be mounted at /system_root, and then the		#
+#	below mount needs to be included here so the			#
+#	binaries can be found and linker will work properly		#
+#															#
+#############################################################
+on property:vold_decrypt.symlinked_vendor=1
+	mount /system_root/system /system
+
 on property:ro.crypto.fs_crypto_blkdev=*
     stop sbinqseecomd
 

@@ -28,7 +28,9 @@
 import /init.recovery.qcom_decrypt.rc
 
 on init
-    # Load Tuxera exFAT module
+    export ANDROID_ROOT /system_root
+
+	# Load Tuxera exFAT module
     insmod /vendor/lib/modules/texfat.ko
 	
 	start boot-1-0
@@ -38,7 +40,7 @@ on fs
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     symlink /dev/block/bootdevice/by-name/oem_stanvbk /dev/block/bootdevice/by-name/oem_stanvbk_a
     symlink /dev/block/bootdevice/by-name/oem_stanvbk /dev/block/bootdevice/by-name/oem_stanvbk_b
-	
+
 on boot
     start chargeled
 	
