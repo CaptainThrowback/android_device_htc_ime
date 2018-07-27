@@ -8,7 +8,7 @@ on fs
     chmod 0664 /dev/ion
     chown system system /dev/ion
 
-on property:ro.crypto.state=encrypted
+on property:ro.crypto.state=encrypted && property:twrp.mount_to_decrypt=1
     start sbinqseecomd
 
 #############################################################
@@ -22,7 +22,8 @@ on property:ro.crypto.state=encrypted
 on property:vold_decrypt.symlinked_vendor=1
 	mount /system_root/system /system
 
-on property:ro.crypto.fs_crypto_blkdev=*
+on property:ro.crypto.fs_crypto_blkdev=* && property:twrp.mount_to_decrypt=0
+	setprop crypto.ready 0
     stop sbinqseecomd
 
 service patchlevel /sbin/patchlevel.sh

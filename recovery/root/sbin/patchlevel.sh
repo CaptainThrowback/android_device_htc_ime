@@ -10,30 +10,15 @@ finish()
 	exit 0
 }
 
-is_fastboot_twrp=$(getprop ro.boot.fastboot)
-if [ ! -z "$is_fastboot_twrp" ]; then
-	osver=$(getprop ro.build.version.release_orig)
-	patchlevel=$(getprop ro.build.version.security_patch_orig)
-	if [ ! -z "$osver" ]; then
-		resetprop ro.build.version.release "$osver"
-		sed -i "s/ro.build.version.release=.*/ro.build.version.release="$osver"/g" /prop.default ;
-	fi
-	if [ ! -z "$patchlevel" ]; then
-		resetprop ro.build.version.security_patch "$patchlevel"
-		sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch="$patchlevel"/g" /prop.default ;
-	fi
-	setprop crypto.ready 1
-	exit 0
-fi
-
+osver=$(getprop ro.build.version.release_orig)
+patchlevel=$(getprop ro.build.version.security_patch_orig)
 suffix=$(getprop ro.boot.slot_suffix)
+
 if [ -z "$suffix" ]; then
 	suf=$(getprop ro.boot.slot)
 	suffix="_$suf"
 fi
 
-osver=$(getprop ro.build.version.release_orig)
-patchlevel=$(getprop ro.build.version.security_patch_orig)
 venpath="/dev/block/bootdevice/by-name/vendor$suffix"
 mkdir /v
 mount -t ext4 -o ro "$venpath" /v
