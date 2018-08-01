@@ -48,6 +48,9 @@ if [ -f /s/system/build.prop ]; then
 		resetprop ro.build.version.security_patch "$patchlevel"
 		sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch="$patchlevel"/g" /prop.default ;
 	fi
+	if [ -f /v/lib/modules/texfat.ko ]; then
+		insmod /v/lib/modules/texfat.ko
+	fi
 	finish
 else
 	# Be sure to increase the PLATFORM_VERSION in build/core/version_defaults.mk to override Google's anti-rollback features to something rather insane

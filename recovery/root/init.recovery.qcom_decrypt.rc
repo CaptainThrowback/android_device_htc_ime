@@ -23,6 +23,9 @@ on property:vold_decrypt.symlinked_vendor=1
 	mount /system_root/system /system
 
 on property:ro.crypto.fs_crypto_blkdev=* && property:twrp.mount_to_decrypt=0
+	# Need to free up the /system path for install zips to use
+	start unmount
+
 	setprop crypto.ready 0
     stop sbinqseecomd
 
@@ -37,6 +40,13 @@ service sbinqseecomd /sbin/qseecomd
 	user root
 	group root
     setenv LD_LIBRARY_PATH /vendor/lib64:/sbin
+    disabled
+    oneshot
+	seclabel u:r:recovery:s0
+
+service unmount /sbin/unmount.sh
+	user root
+	group root
     disabled
     oneshot
 	seclabel u:r:recovery:s0
