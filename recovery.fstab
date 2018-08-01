@@ -9,7 +9,6 @@
 /devlog			ext4	/dev/block/bootdevice/by-name/devlog
 /carrier		ext4	/dev/block/bootdevice/by-name/carrier
 /cota			ext4	/dev/block/bootdevice/by-name/cota
-/preload		ext4	/dev/block/bootdevice/by-name/apppreload
 /persist		ext4	/dev/block/bootdevice/by-name/persist
 
 # Removable storage
