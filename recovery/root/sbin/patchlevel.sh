@@ -67,5 +67,8 @@ else
 		resetprop ro.build.version.security_patch "$patchlevel"
 		sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch="$patchlevel"/g" /prop.default ;
 	fi
+	if [ -f /v/lib/modules/texfat.ko ]; then
+		insmod /v/lib/modules/texfat.ko
+	fi
 	finish
 fi
