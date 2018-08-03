@@ -28,10 +28,11 @@ mount -t ext4 -o ro "$syspath" /s
 
 if [ -f /s/system/build.prop ]; then
 	# TODO: It may be better to try to read these from the boot image than from /system
-	device=$(grep -i 'ro.product.device' /s/system/build.prop  | cut -f2 -d'=')
-	fingerprint=$(grep -i 'ro.build.fingerprint' /s/system/build.prop  | cut -f2 -d'=')
-	osver=$(grep -i 'ro.build.version.release' /s/system/build.prop  | cut -f2 -d'=')
-	patchlevel=$(grep -i 'ro.build.version.security_patch' /s/system/build.prop  | cut -f2 -d'=')
+	device=$(grep -i 'ro.product.device' /s/system/build.prop  | cut -f2 -d'=' -s)
+	fingerprint=$(grep -i 'ro.build.fingerprint' /s/system/build.prop  | cut -f2 -d'=' -s)
+	osver=$(grep -i 'ro.build.version.release' /s/system/build.prop  | cut -f2 -d'=' -s)
+	patchlevel=$(grep -i 'ro.build.version.security_patch' /s/system/build.prop  | cut -f2 -d'=' -s)
+	product=$(grep -i 'ro.build.product' /s/system/build.prop  | cut -f2 -d'=' -s)
 	if [ ! -z "$device" ]; then
 		resetprop ro.product.device "$device"
 		sed -i "s/ro.product.device=.*/ro.product.device="$device"/g" /prop.default ;
@@ -47,6 +48,10 @@ if [ -f /s/system/build.prop ]; then
 	if [ ! -z "$patchlevel" ]; then
 		resetprop ro.build.version.security_patch "$patchlevel"
 		sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch="$patchlevel"/g" /prop.default ;
+	fi
+	if [ ! -z "$product" ]; then
+		resetprop ro.build.product "$product"
+		sed -i "s/ro.build.product=.*/ro.build.product="$product"/g" /prop.default ;
 	fi
 	if [ -f /v/lib/modules/texfat.ko ]; then
 		insmod /v/lib/modules/texfat.ko
