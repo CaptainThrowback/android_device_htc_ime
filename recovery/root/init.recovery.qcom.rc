@@ -39,8 +39,15 @@ on fs
 on boot
     start chargeled
 	
+    # Workaround for adb not coming up
     setprop sys.usb.config adb
+    
     write /sys/devices/platform/soc/c440000.qcom,spmi/spmi-0/spmi0-02/c440000.qcom,spmi:qcom,pmi8998@2:qcom,qpnp-smb2/power_supply/usb/otg_switch 1
+
+on property:ro.crypto.state=unencrypted
+	# Bind mount /data/cache to /cache
+	wait /data/cache
+	mount /data/cache /cache
 
 service boot-1-0 /sbin/android.hardware.boot@1.0-service
     user root

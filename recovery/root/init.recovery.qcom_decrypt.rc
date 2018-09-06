@@ -1,4 +1,5 @@
 on init
+	stop ldconfigtxt
 	start patchlevel
 
 on fs
@@ -8,7 +9,7 @@ on fs
     chmod 0664 /dev/ion
     chown system system /dev/ion
 
-on property:ro.crypto.state=encrypted && property:twrp.mount_to_decrypt=1
+on property:ro.crypto.state=encrypted && property:twrp.mount_to_decrypt=1 && property:crypto.ready=1
     start sbinqseecomd
 
 #############################################################
@@ -23,8 +24,11 @@ on property:vold_decrypt.symlinked_vendor=1
 	mount /system_root/system /system
 
 on property:ro.crypto.fs_crypto_blkdev=* && property:twrp.mount_to_decrypt=0
+	wait /data/cache
+
 	# Need to free up the /system path for install zips to use
-	start unmount
+	# Also bind mount /data/cache to /cache
+	start mounts
 
 	setprop crypto.ready 0
     stop sbinqseecomd
@@ -44,7 +48,7 @@ service sbinqseecomd /sbin/qseecomd
     oneshot
 	seclabel u:r:recovery:s0
 
-service unmount /sbin/unmount.sh
+service mounts /sbin/mounts.sh
 	user root
 	group root
     disabled

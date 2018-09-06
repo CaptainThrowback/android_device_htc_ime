@@ -79,14 +79,11 @@ TARGET_COPY_OUT_VENDOR := vendor
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
-USE_LD_CONFIG_FILE := true
 
 # TWRP specific build flags
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
-TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_BRIGHTNESS_PATH := "/sys/devices/platform/soc/a88000.i2c/i2c-0/0-002c/backlight/lcd-bl/brightness"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_EXCLUDE_SUPERSU := true
 TW_EXTRA_LANGUAGES := true
 TW_INCLUDE_NTFS_3G := true
 AB_OTA_UPDATER := true
@@ -97,19 +94,21 @@ TW_DEFAULT_BRIGHTNESS := 178
 TW_HAS_DOWNLOAD_MODE := true
 TW_THEME := portrait_hdpi
 TW_NO_EXFAT_FUSE := true
-TARGET_RECOVERY_DEVICE_MODULES := chargeled
+TARGET_RECOVERY_DEVICE_MODULES := chargeled tzdata
 TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
-TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so
+TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so ${OUT}/system/usr/share/zoneinfo/tzdata
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
+TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_NO_SCREEN_BLANK := true
-TW_EXCLUDE_MTP := true
+#TW_EXCLUDE_MTP := true
+#TW_USE_TOOLBOX := true
 
 # Encryption
 PLATFORM_VERSION := 8.0.0
 PLATFORM_SECURITY_PATCH := 2018-06-01
 TARGET_HW_DISK_ENCRYPTION := true
 TW_INCLUDE_CRYPTO := true
-TW_CRYPTO_USE_SYSTEM_VOLD := qseecomd hwservicemanager keymaster-3-0
+TW_CRYPTO_USE_SYSTEM_VOLD := hwservicemanager qseecomd keymaster-3-0
 
 # Additional modules and relink files for resetprop
 TARGET_RECOVERY_DEVICE_MODULES += libicuuc libicui18n libsqlite
@@ -119,8 +118,8 @@ TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libicuuc.so $(OUT)/sy
 #TWRP_EVENT_LOGGING := true
 #TARGET_USES_LOGD := true
 #TWRP_INCLUDE_LOGCAT := true
-#TARGET_RECOVERY_DEVICE_MODULES += debuggerd # strace
-#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd # $(OUT)/system/xbin/strace
+#TARGET_RECOVERY_DEVICE_MODULES += debuggerd strace
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd $(OUT)/system/xbin/strace
 #TARGET_RECOVERY_DEVICE_MODULES += twrpdec
 #TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
 #TW_CRYPTO_SYSTEM_VOLD_DEBUG := true
