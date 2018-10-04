@@ -100,19 +100,24 @@ TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_NO_SCREEN_BLANK := true
+TW_USE_LEDS_HAPTICS := true
 #TW_EXCLUDE_MTP := true
 #TW_USE_TOOLBOX := true
 
-# Encryption
+# Custom Platform Version and Security Patch
+# Must match build.prop of current system for decryption to work properly!
 PLATFORM_VERSION := 8.0.0
-PLATFORM_SECURITY_PATCH := 2018-06-01
+# 1.15 Stock
+#PLATFORM_SECURITY_PATCH := 2018-03-01
+# 1.21/1.25 OTA
+#PLATFORM_SECURITY_PATCH := 2018-06-01
+# 1.30 OTA
+PLATFORM_SECURITY_PATCH := 2018-09-01
+
+# Encryption
 TARGET_HW_DISK_ENCRYPTION := true
 TW_INCLUDE_CRYPTO := true
 TW_CRYPTO_USE_SYSTEM_VOLD := hwservicemanager qseecomd keymaster-3-0
-
-# Additional modules and relink files for resetprop
-TARGET_RECOVERY_DEVICE_MODULES += libicuuc libicui18n libsqlite
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/libicui18n.so $(OUT)/system/lib64/libsqlite.so
 
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
