@@ -1,16 +1,20 @@
-on init
-	stop ldconfigtxt
+on fs
+    wait /dev/block/bootdevice
 	start patchlevel
 
-on fs
     # needed to make qseecomd work in recovery
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
     chmod 0664 /dev/ion
     chown system system /dev/ion
 
-on property:ro.crypto.state=encrypted && property:twrp.mount_to_decrypt=1 && property:crypto.ready=1
-    start sbinqseecomd
+on property:ro.crypto.state=encrypted
+	start sbinhwservicemanager
+	start sbinservicemanager
+	start sbinqseecomd
+
+on property:hwservicemanager.ready=true
+    start sbinkeymaster-3-0
 
 #############################################################
 #															#
@@ -23,15 +27,15 @@ on property:ro.crypto.state=encrypted && property:twrp.mount_to_decrypt=1 && pro
 on property:vold_decrypt.symlinked_vendor=1
 	mount /system_root/system /system
 
-on property:ro.crypto.fs_crypto_blkdev=* && property:twrp.mount_to_decrypt=0
-	wait /data/cache
+on property:ro.crypto.fs_crypto_blkdev=*
+    setprop fde.ready 0
+    stop sbinqseecomd
+	stop sbinhwservicemanager
+	stop sbinservicemanager
+	stop sbinkeymaster-3-0
 
 	# Need to free up the /system path for install zips to use
-	# Also bind mount /data/cache to /cache
 	start mounts
-
-	setprop crypto.ready 0
-    stop sbinqseecomd
 
 service patchlevel /sbin/patchlevel.sh
 	user root
@@ -47,7 +51,27 @@ service sbinqseecomd /sbin/qseecomd
     disabled
     oneshot
 	seclabel u:r:recovery:s0
+	
+service sbinhwservicemanager /sbin/hwservicemanager
+    user root
+    group root
+    disabled
+    onrestart setprop hwservicemanager.ready false
+    seclabel u:r:recovery:s0
 
+service sbinservicemanager /sbin/servicemanager
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service sbinkeymaster-3-0 /sbin/android.hardware.keymaster@3.0-service-qti
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/sbin
+    disabled
+    seclabel u:r:recovery:s0
+    
 service mounts /sbin/mounts.sh
 	user root
 	group root

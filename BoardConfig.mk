@@ -48,14 +48,11 @@ TARGET_USES_UEFI := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.console=ttyMSM0 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 service_locator.enable=1 swiotlb=2048 androidboot.configfs=true androidboot.usbcontroller=a600000.dwc3
-#BOARD_KERNEL_CMDLINE += androidboot.hardware=htc_ime
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
-#BOARD_KERNEL_CMDLINE += skip_override
 BOARD_KERNEL_CMDLINE += androidboot.fastboot=1
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 TARGET_PREBUILT_KERNEL := device/$(BOARD_VENDOR)/$(TARGET_DEVICE)/prebuilt/Image.lz4-dtb
-#BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --second_offset 0x00f00000 --tags_offset 0x00000100 --board recovery:0
 
 # Platform
 TARGET_BOARD_PLATFORM := sdm845
@@ -79,6 +76,8 @@ TARGET_COPY_OUT_VENDOR := vendor
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
+AB_OTA_UPDATER := true
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 
 # TWRP specific build flags
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
@@ -86,43 +85,44 @@ TW_BRIGHTNESS_PATH := "/sys/devices/platform/soc/a88000.i2c/i2c-0/0-002c/backlig
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_EXTRA_LANGUAGES := true
 TW_INCLUDE_NTFS_3G := true
-AB_OTA_UPDATER := true
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_HAS_DOWNLOAD_MODE := true
 TW_THEME := portrait_hdpi
 TW_NO_EXFAT_FUSE := true
 TARGET_RECOVERY_DEVICE_MODULES := chargeled tzdata
-TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
-TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so ${OUT}/system/usr/share/zoneinfo/tzdata
+TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0 hwservicemanager servicemanager libxml2 keystore libicuuc android.hidl.base@1.0
+TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/lib64/android.hardware.boot@1.0.so $(OUT)/system/usr/share/zoneinfo/tzdata $(OUT)/system/bin/hwservicemanager $(OUT)/system/bin/servicemanager $(OUT)/system/lib64/libxml2.so $(OUT)/system/lib64/hw/keystore.default.so $(OUT)/system/lib64/libicuuc.so $(OUT)/system/lib64/android.hidl.base@1.0.so
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_NO_SCREEN_BLANK := true
-TW_USE_LEDS_HAPTICS := true
-#TW_EXCLUDE_MTP := true
-#TW_USE_TOOLBOX := true
+TW_USE_TOOLBOX := true
 
 # Custom Platform Version and Security Patch
-# Must match build.prop of current system for decryption to work properly!
-PLATFORM_VERSION := 8.0.0
+# TWRP Defaults
+PLATFORM_VERSION := 16.1.0
+PLATFORM_SECURITY_PATCH := 2025-12-05
+# Must match build.prop of current system for vold decrypt to work properly!
+#PLATFORM_VERSION := 8.0.0
 # 1.15 Stock
 #PLATFORM_SECURITY_PATCH := 2018-03-01
 # 1.21/1.25 OTA
 #PLATFORM_SECURITY_PATCH := 2018-06-01
 # 1.30 OTA
-PLATFORM_SECURITY_PATCH := 2018-09-01
+#PLATFORM_SECURITY_PATCH := 2018-09-01
+# 1.53 OTA
+#PLATFORM_SECURITY_PATCH := 2018-12-01
 
 # Encryption
 TARGET_HW_DISK_ENCRYPTION := true
 TW_INCLUDE_CRYPTO := true
-TW_CRYPTO_USE_SYSTEM_VOLD := hwservicemanager qseecomd keymaster-3-0
+TW_CRYPTO_USE_SYSTEM_VOLD := hwservicemanager servicemanager qseecomd keymaster-3-0
 
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
 #TARGET_USES_LOGD := true
 #TWRP_INCLUDE_LOGCAT := true
-#TARGET_RECOVERY_DEVICE_MODULES += debuggerd strace
-#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd $(OUT)/system/xbin/strace
+#TARGET_RECOVERY_DEVICE_MODULES += debuggerd # strace
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(OUT)/system/bin/debuggerd # $(OUT)/system/xbin/strace
 #TARGET_RECOVERY_DEVICE_MODULES += twrpdec
 #TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
 #TW_CRYPTO_SYSTEM_VOLD_DEBUG := true

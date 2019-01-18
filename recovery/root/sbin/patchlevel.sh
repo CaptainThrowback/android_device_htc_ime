@@ -6,7 +6,7 @@ finish()
 	umount /s
 	rmdir /v
 	rmdir /s
-	setprop crypto.ready 1
+	setprop fde.ready 1
 	exit 0
 }
 
@@ -28,10 +28,19 @@ mount -t ext4 -o ro "$syspath" /s
 
 if [ -f /s/system/build.prop ]; then
 	# TODO: It may be better to try to read these from the boot image than from /system
-	device=$(grep -i 'ro.product.device' /s/system/build.prop  | cut -f2 -d'=' -s)
-	fingerprint=$(grep -i 'ro.build.fingerprint' /s/system/build.prop  | cut -f2 -d'=' -s)
 	osver=$(grep -i 'ro.build.version.release' /s/system/build.prop  | cut -f2 -d'=' -s)
 	patchlevel=$(grep -i 'ro.build.version.security_patch' /s/system/build.prop  | cut -f2 -d'=' -s)
+	if [ ! -z "$osver" ]; then
+		resetprop ro.build.version.release "$osver"
+		sed -i "s/ro.build.version.release=.*/ro.build.version.release="$osver"/g" /prop.default ;
+	fi
+	if [ ! -z "$patchlevel" ]; then
+		resetprop ro.build.version.security_patch "$patchlevel"
+		sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch="$patchlevel"/g" /prop.default ;
+	fi
+	# Set additional props from build.prop
+	device=$(grep -i 'ro.product.device' /s/system/build.prop  | cut -f2 -d'=' -s)
+	fingerprint=$(grep -i 'ro.build.fingerprint' /s/system/build.prop  | cut -f2 -d'=' -s)
 	product=$(grep -i 'ro.build.product' /s/system/build.prop  | cut -f2 -d'=' -s)
 	if [ ! -z "$device" ]; then
 		resetprop ro.product.device "$device"
@@ -41,18 +50,11 @@ if [ -f /s/system/build.prop ]; then
 		resetprop ro.build.fingerprint "$fingerprint"
 		sed -i "s/ro.build.fingerprint=.*/ro.build.fingerprint="$osver"/g" /prop.default ;
 	fi
-	if [ ! -z "$osver" ]; then
-		resetprop ro.build.version.release "$osver"
-		sed -i "s/ro.build.version.release=.*/ro.build.version.release="$osver"/g" /prop.default ;
-	fi
-	if [ ! -z "$patchlevel" ]; then
-		resetprop ro.build.version.security_patch "$patchlevel"
-		sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch="$patchlevel"/g" /prop.default ;
-	fi
 	if [ ! -z "$product" ]; then
 		resetprop ro.build.product "$product"
 		sed -i "s/ro.build.product=.*/ro.build.product="$product"/g" /prop.default ;
 	fi
+	# Load Tuxera exfat module
 	if [ -f /v/lib/modules/texfat.ko ]; then
 		insmod /v/lib/modules/texfat.ko
 	fi
@@ -67,6 +69,7 @@ else
 		resetprop ro.build.version.security_patch "$patchlevel"
 		sed -i "s/ro.build.version.security_patch=.*/ro.build.version.security_patch="$patchlevel"/g" /prop.default ;
 	fi
+	# Load Tuxera exfat module
 	if [ -f /v/lib/modules/texfat.ko ]; then
 		insmod /v/lib/modules/texfat.ko
 	fi

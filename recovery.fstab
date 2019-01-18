@@ -1,7 +1,7 @@
 # mount point		fstype  device					device2			flags
 /system_root		ext4	/dev/block/bootdevice/by-name/system				flags=display="System";slotselect
 /system_image		emmc	/dev/block/bootdevice/by-name/system				flags=slotselect;flashimg=1
-/vendor			ext4	/dev/block/bootdevice/by-name/vendor				flags=slotselect;backup=1;mounttodecrypt
+/vendor			ext4	/dev/block/bootdevice/by-name/vendor				flags=slotselect;backup=1
 /vendor_image		emmc	/dev/block/bootdevice/by-name/vendor				flags=slotselect;backup=1;flashimg=1
 /data			ext4	/dev/block/bootdevice/by-name/userdata				flags=encryptable=/dev/block/bootdevice/by-name/extra
 /boot			emmc	/dev/block/bootdevice/by-name/boot				flags=slotselect
