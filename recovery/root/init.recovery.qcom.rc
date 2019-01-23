@@ -34,8 +34,8 @@ on init
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-	
-	# Load Tuxera exfat module
+
+    # Load Tuxera exfat module
     insmod /vendor/lib/modules/texfat.ko
 
 on boot

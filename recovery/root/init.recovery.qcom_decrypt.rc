@@ -1,57 +1,55 @@
-on fs
-    wait /dev/block/bootdevice
-	start patchlevel
+on init
+    start sbinhwservicemanager
+    start sbinservicemanager
+    start sbinqseecomd
+    start patchlevel
 
+on fs
     # needed to make qseecomd work in recovery
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
     chmod 0664 /dev/ion
     chown system system /dev/ion
 
-on property:ro.crypto.state=encrypted
-	start sbinhwservicemanager
-	start sbinservicemanager
-	start sbinqseecomd
-
 on property:hwservicemanager.ready=true
     start sbinkeymaster-3-0
 
 #############################################################
-#															#
-#   Note: On AB devices using vold decrypt, system			#
-#	needs to be mounted at /system_root, and then the		#
-#	below mount needs to be included here so the			#
-#	binaries can be found and linker will work properly		#
-#															#
+#                                                           #
+#   Note: On AB devices using vold decrypt, system          #
+#   needs to be mounted at /system_root, and then the       #
+#   below mount needs to be included here so the            #
+#   binaries can be found and linker will work properly     #
+#                                                           #
 #############################################################
 on property:vold_decrypt.symlinked_vendor=1
-	mount /system_root/system /system
+    mount /system_root/system /system
 
 on property:ro.crypto.fs_crypto_blkdev=*
     setprop fde.ready 0
     stop sbinqseecomd
-	stop sbinhwservicemanager
-	stop sbinservicemanager
-	stop sbinkeymaster-3-0
+    stop sbinhwservicemanager
+    stop sbinservicemanager
+    stop sbinkeymaster-3-0
 
-	# Need to free up the /system path for install zips to use
-	start mounts
+    # Need to free up the /system path for install zips to use
+    start mounts
 
 service patchlevel /sbin/patchlevel.sh
-	user root
-	group root
+    user root
+    group root
     disabled
     oneshot
-	seclabel u:r:recovery:s0
+    seclabel u:r:recovery:s0
 
 service sbinqseecomd /sbin/qseecomd
-	user root
-	group root
+    user root
+    group root
     setenv LD_LIBRARY_PATH /vendor/lib64:/sbin
     disabled
     oneshot
-	seclabel u:r:recovery:s0
-	
+    seclabel u:r:recovery:s0
+
 service sbinhwservicemanager /sbin/hwservicemanager
     user root
     group root
@@ -73,8 +71,8 @@ service sbinkeymaster-3-0 /sbin/android.hardware.keymaster@3.0-service-qti
     seclabel u:r:recovery:s0
     
 service mounts /sbin/mounts.sh
-	user root
-	group root
+    user root
+    group root
     disabled
     oneshot
-	seclabel u:r:recovery:s0
+    seclabel u:r:recovery:s0
