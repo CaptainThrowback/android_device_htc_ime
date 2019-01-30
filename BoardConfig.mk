@@ -95,7 +95,7 @@ TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/lib64/android.hardware.boot
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_NO_SCREEN_BLANK := true
-#TW_USE_TOOLBOX := true
+TW_USE_TOOLBOX := true
 
 # Custom Platform Version and Security Patch
 # TWRP Defaults

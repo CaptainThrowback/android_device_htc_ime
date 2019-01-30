@@ -29,14 +29,11 @@ import /init.recovery.qcom_decrypt.rc
 
 on init
     export ANDROID_ROOT /system_root
-	start boot-1-0
+    start boot-1-0
 
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-
-    # Load Tuxera exfat module
-    insmod /vendor/lib/modules/texfat.ko
 
 on boot
     export LD_CONFIG_FILE /sbin/ld.config.txt
@@ -56,3 +53,4 @@ service boot-1-0 /sbin/android.hardware.boot@1.0-service
 service chargeled /sbin/chargeled
     disabled
     seclabel u:r:healthd:s0
+
