@@ -19,17 +19,6 @@ on fs
 on property:init.svc.sbinhwservicemanager=running && property:hwservicemanager.ready=true
     start sbinkeymaster-3-0
 
-#############################################################
-#                                                           #
-#   Note: On AB devices using vold decrypt, system          #
-#   needs to be mounted at /system_root, and then the       #
-#   below mount needs to be included here so the            #
-#   binaries can be found and linker will work properly     #
-#                                                           #
-#############################################################
-on property:vold_decrypt.symlinked_vendor=1
-    mount /system_root/system /system
-
 on property:ro.crypto.fs_crypto_blkdev=*
     setprop fde.ready 0
     stop sbinqseecomd
