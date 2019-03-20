@@ -1,7 +1,7 @@
 #!/sbin/sh
 
 # Remove /system bind mount
-umount $ANDROID_ROOT
+umount "$ANDROID_ROOT"
 rm -f /system
 
 # Symlink tzdata
