@@ -57,7 +57,7 @@ log_info "CID Found: $bootcid"
 case $bootmid in
 	"2Q5510000")
 		## EMEA/Aisa TW/RUS/SEA India Dual-SIM ##
-		if [ $hardware == 'htc_exo' ]; then
+		if [ "$hardware" = 'htc_exo' ]; then
 			update_product_device "htc_exodugl";
 			update_model "EXODUS 1";
 		else
@@ -67,7 +67,7 @@ case $bootmid in
 		;;
 	"2Q5520000")
 		## EMEA/US Unlocked, Single-SIM ##
-		if [ $hardware == 'htc_exo' ]; then
+		if [ "$hardware" = 'htc_exo' ]; then
 			update_product_device "htc_exouhl";
 			update_model "EXODUS 1";
 		else
@@ -77,7 +77,7 @@ case $bootmid in
 		;;
 	"2Q5530000")
 		## CHINA, Dual-SIM ##
-		if [ $hardware == 'htc_exo' ]; then
+		if [ "$hardware" = 'htc_exo' ]; then
 			update_product_device "htc_exodtwl";
 			update_model "EXODUS 1";
 		else
@@ -87,7 +87,7 @@ case $bootmid in
 		;;
 	*)
 		log_error "MID device parameters unknown. Setting default values."
-		if [ $hardware == 'htc_exo' ]; then
+		if [ "$hardware" = 'htc_exo' ]; then
 			update_product_device "htc_exodugl";
 			update_model "EXODUS 1";
 		else
