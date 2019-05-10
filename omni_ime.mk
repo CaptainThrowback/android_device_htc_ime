@@ -22,14 +22,26 @@ $(call inherit-product, build/target/product/embedded.mk)
 # Inherit from our custom product configuration
 $(call inherit-product, vendor/omni/config/common.mk)
 
+# Platform
+TARGET_BOARD_PLATFORM := sdm845
+
+# Use the A/B updater.
+AB_OTA_UPDATER := true
+
+# Enable update engine sideloading by including the static version of the
+# boot_control HAL and its dependencies.
+PRODUCT_STATIC_BOOT_CONTROL_HAL := \
+    bootctrl.$(TARGET_BOARD_PLATFORM) \
+    libgptutils \
+    libz
+
+PRODUCT_PACKAGES += \
+    update_engine_sideload
+
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := ime
 PRODUCT_NAME := omni_ime
 PRODUCT_BRAND := htc
 PRODUCT_MODEL := HTC U12+
-PRODUCT_MANUFACTURER := HTC	
+PRODUCT_MANUFACTURER := HTC
 
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRODUCT_NAME=ime \
-	BUILD_PRODUCT=htc_ime \
-    TARGET_DEVICE=htc_ime
